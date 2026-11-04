@@ -60,11 +60,3 @@ Abra <http://localhost:8080>. Para compilar el proyecto:
 ```bash
 mvn compile
 ```
-
-## Reglas de Git del equipo
-
-- Crear una rama por cada HU (historia de usuario).
-- Escribir los mensajes de commit en español.
-- Abrir un pull request obligatorio para revisar e integrar cada HU.
-- No subir credenciales, claves, archivos `application-local.properties` ni
-  JSON de Firebase.
