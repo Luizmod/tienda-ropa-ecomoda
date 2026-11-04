@@ -1,0 +1,1 @@
+-- Esquema del módulo método de pago (pendiente de implementar).

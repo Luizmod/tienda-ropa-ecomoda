@@ -1,0 +1,1 @@
+-- Esquema del módulo consulta (pendiente de implementar).

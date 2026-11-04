@@ -1,0 +1,1 @@
+-- Esquema del módulo dirección de envío (pendiente de implementar).

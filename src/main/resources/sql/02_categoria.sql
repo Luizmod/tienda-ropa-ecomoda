@@ -1,0 +1,1 @@
+-- Esquema del módulo categoría (pendiente de implementar).
