@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{usuario/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{usuario/fragmentos :: cabecera}"></header>
+<main class="perfil">
+    <h1 th:text="#{credenciales.perfil}"></h1>
+    <nav th:replace="~{usuario/fragmentos :: pestanas}"></nav>
+    <section th:replace="~{usuario/fragmentos :: mensajes}"></section>
+    <div class="perfil-columnas">
+        <section th:replace="~{usuario/fragmentos :: datos}"></section>
+        <section class="tarjeta">
+            <h2 th:text="#{credenciales.modificar}"></h2>
+            <p th:text="#{credenciales.modificar.ayuda}"></p>
+            <form th:action="@{/perfil/guardar}" method="post">
+                <label for="correo" th:text="#{credenciales.correo}"></label>
+                <input class="form-control" id="correo" name="correo" type="email" th:value="${perfil.correo}" maxlength="254" autocomplete="username" required>
+                <label for="actual" th:text="#{credenciales.actual}"></label>
+                <input class="form-control" id="actual" name="contrasenaActual" type="password" maxlength="72" autocomplete="current-password" required>
+                <label for="nueva" th:text="#{credenciales.nueva}"></label>
+                <input class="form-control" id="nueva" name="nuevaContrasena" type="password" minlength="8" maxlength="72" autocomplete="new-password">
+                <label for="confirmacion" th:text="#{credenciales.confirmacion}"></label>
+                <input class="form-control" id="confirmacion" name="confirmacion" type="password" minlength="8" maxlength="72" autocomplete="new-password">
+                <div class="acciones mt-4">
+                    <button class="btn btn-dark" th:text="#{credenciales.guardar}"></button>
+                    <a class="btn btn-outline-dark" th:href="@{/perfil}" th:text="#{credenciales.cancelar}"></a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{credenciales.titulo}"></title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/credenciales.css}" rel="stylesheet">
+</head>
+<body>
+<aside th:fragment="marca" class="marca">
+    <a th:href="@{/}" class="logotipo" th:text="#{aplicacion.titulo}"></a>
+    <h1 th:text="#{credenciales.lema}"></h1>
+    <p th:text="#{credenciales.tienda}"></p>
+</aside>
+<header th:fragment="cabecera" class="cabecera">
+    <a class="logotipo" th:href="@{/}" th:text="#{aplicacion.titulo}"></a>
+    <a th:href="@{/}" th:text="#{credenciales.inicio}"></a>
+    <a th:href="@{/perfil}" th:text="#{credenciales.perfil}"></a>
+    <form th:action="@{/logout}" method="post">
+        <button class="btn btn-outline-dark" th:text="#{credenciales.salir}"></button>
+    </form>
+</header>
+<nav th:fragment="pestanas" class="nav nav-tabs mb-4" th:attr="aria-label=#{credenciales.perfil}">
+    <a class="nav-link active" th:href="@{/perfil}" th:text="#{credenciales.datos}"></a>
+    <a class="nav-link" th:href="@{/direccion/listado}" th:text="#{nav.direcciones}"></a>
+    <a class="nav-link" th:href="@{/metodopago/listado}" th:text="#{nav.metodosPago}"></a>
+    <a class="nav-link" th:href="@{/consulta/listado}" th:text="#{nav.consultas}"></a>
+</nav>
+<section th:fragment="mensajes">
+    <p th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></p>
+    <p th:if="${todoOk}" class="alert alert-success" role="status" th:text="${todoOk}"></p>
+</section>
+<section th:fragment="datos" class="tarjeta">
+    <h2 th:text="#{credenciales.datos}"></h2>
+    <dl>
+        <dt th:text="#{credenciales.correo}"></dt>
+        <dd th:text="${perfil.correo}"></dd>
+        <dt th:text="#{credenciales.contrasena}"></dt>
+        <dd th:text="#{credenciales.contrasena.protegida}"></dd>
+    </dl>
+    <div class="acciones">
+        <a class="btn btn-dark" th:href="@{/perfil/modifica}" th:text="#{credenciales.modificar}"></a>
+        <a class="btn btn-outline-dark" th:href="@{/perfil/eliminar}" th:text="#{credenciales.borrar}"></a>
+        <a class="btn btn-outline-dark" th:href="@{/}" th:text="#{credenciales.volver}"></a>
+    </div>
+</section>
+</body>
+</html>
