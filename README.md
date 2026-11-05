@@ -23,8 +23,9 @@ opcional y permanece desactivado por defecto.
    ```
 
 El script crea la base `ecomoda`, codificada en `utf8mb4`, el usuario local
-`ecomoda_dev` y sus permisos. Los scripts de módulos restantes contienen solo
-comentarios de cabecera por ahora.
+`ecomoda_dev` y sus permisos. Ejecute también `01_usuario.sql` para habilitar
+el registro y el inicio de sesión, y `07_cupon.sql` para habilitar los cupones.
+Ambos están en `src/main/resources/sql` y se ejecutan manualmente.
 
 ## Configuración local
 
@@ -60,6 +61,9 @@ Abra <http://localhost:8080>. Para compilar el proyecto:
 ```bash
 mvn compile
 ```
+
+Para probar HU-12, entre con una cuenta de rol `ADMIN` y abra
+`/cupon/listado`. Puede crear, modificar y eliminar cupones desde esa pantalla.
 
 ## Reglas de Git del equipo
 
