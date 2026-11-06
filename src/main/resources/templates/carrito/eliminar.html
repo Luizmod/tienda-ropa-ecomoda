@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{accion.confirmar}"></h1>
+    <p th:text="#{carrito.confirmar(${linea.nombre},${linea.talla})}"></p>
+    <form method="post" th:action="@{/carrito/eliminar/{id}(id=${linea.idLinea})}">
+        <button class="btn btn-danger" type="submit" th:text="#{accion.eliminar}"></button>
+        <a th:replace="~{carrito/fragmentos :: cancelar}"></a>
+    </form>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{carrito.catalogo}"></h1>
+    <p th:if="${variantes.empty}" th:text="#{carrito.catalogo.vacio}"></p>
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        <article class="col" th:each="variante : ${variantes}" th:with="prenda=${variante.prenda}">
+            <div class="card h-100">
+                <img class="card-img-top" th:if="${!#strings.isEmpty(prenda.rutaImagen)}"
+                     th:src="${prenda.rutaImagen}" th:alt="${prenda.nombre}" loading="lazy">
+                <div class="card-body">
+                    <h2 class="h5" th:text="${prenda.nombre}"></h2>
+                    <p th:text="${prenda.descripcion}"></p>
+                    <dl>
+                        <dt th:text="#{carrito.talla}"></dt>
+                        <dd th:text="${variante.talla}"></dd>
+                        <dt th:text="#{producto.precio}"></dt>
+                        <dd th:text="${prenda.precio}"></dd>
+                    </dl>
+                    <p th:if="${variante.cantidad == 0}" th:text="#{carrito.agotado}"></p>
+                    <div th:if="${variante.cantidad > 0}">
+                        <form sec:authorize="hasRole('CLIENTE')" method="post"
+                              th:action="@{/carrito/agregar/{id}(id=${prenda.idPrenda})}">
+                            <input type="hidden" name="talla" th:value="${variante.talla}">
+                            <button class="btn btn-primary" type="submit" th:text="#{carrito.agregar}"></button>
+                        </form>
+                        <a sec:authorize="isAnonymous()" class="btn btn-outline-primary"
+                           th:href="@{/login}" th:text="#{nav.login}"></a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

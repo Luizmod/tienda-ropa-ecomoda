@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{carrito.editar}"></h1>
+    <h2 class="h5" th:text="${linea.nombre}"></h2>
+    <p><span th:text="#{carrito.talla}"></span> <span th:text="${linea.talla}"></span></p>
+    <p><span th:text="#{carrito.disponibles}"></span> <span th:text="${linea.disponibles}"></span></p>
+    <form th:if="${linea.disponibles > 0}" method="post"
+          th:action="@{/carrito/modifica/{id}(id=${linea.idLinea})}">
+        <div class="mb-3">
+            <label class="form-label" for="cantidad" th:text="#{carrito.cantidad}"></label>
+            <input class="form-control" type="number" id="cantidad" name="cantidad"
+                   min="1" th:max="${linea.disponibles}" th:value="${linea.cantidad}" required>
+        </div>
+        <button class="btn btn-primary" type="submit" th:text="#{accion.guardar}"></button>
+        <a th:replace="~{carrito/fragmentos :: cancelar}"></a>
+    </form>
+    <div th:if="${linea.disponibles == 0}">
+        <p th:text="#{carrito.agotado}"></p>
+        <a class="btn btn-outline-danger" th:href="@{/carrito/eliminar/{id}(id=${linea.idLinea})}"
+           th:text="#{accion.eliminar}"></a>
+        <a th:replace="~{carrito/fragmentos :: cancelar}"></a>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

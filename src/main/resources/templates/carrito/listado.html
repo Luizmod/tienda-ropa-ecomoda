@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{carrito.titulo}"></h1>
+    <section th:replace="~{carrito/fragmentos :: mensajes}"></section>
+    <p th:if="${lineas.empty}" th:text="#{carrito.no_mostrar}"></p>
+    <section th:unless="${lineas.empty}">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col" th:text="#{carrito.datos}"></th>
+                        <th scope="col" th:text="#{carrito.talla}"></th>
+                        <th scope="col" th:text="#{producto.precio}"></th>
+                        <th scope="col" th:text="#{carrito.cantidad}"></th>
+                        <th scope="col" th:text="#{carrito.subtotal}"></th>
+                        <th scope="col"><span class="visually-hidden" th:text="#{carrito.editar}"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="linea : ${lineas}">
+                        <td>
+                            <img th:if="${!#strings.isEmpty(linea.rutaImagen)}" th:src="${linea.rutaImagen}"
+                                 th:alt="${linea.nombre}" width="72" loading="lazy">
+                            <strong th:text="${linea.nombre}"></strong>
+                            <div><span th:text="#{carrito.idPrenda}"></span> <span th:text="${linea.idPrenda}"></span></div>
+                            <div th:text="${linea.descripcion}"></div>
+                        </td>
+                        <td th:text="${linea.talla}"></td>
+                        <td th:text="${linea.precio}"></td>
+                        <td>
+                            <span th:text="${linea.cantidad}"></span>
+                            <small class="d-block text-danger" th:if="${linea.cantidad > linea.disponibles}"
+                                   th:text="#{carrito.stock.insuficiente}"></small>
+                        </td>
+                        <td th:text="${linea.subtotal}"></td>
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm"
+                               th:href="@{/carrito/modifica/{id}(id=${linea.idLinea})}" th:text="#{carrito.editar}"></a>
+                            <a class="btn btn-outline-danger btn-sm"
+                               th:href="@{/carrito/eliminar/{id}(id=${linea.idLinea})}" th:text="#{accion.eliminar}"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="fw-bold text-end">
+            <span th:text="#{carrito.totalCompra}"></span>
+            <span th:text="${total}"></span>
+        </p>
+    </section>
+    <a class="btn btn-outline-primary" th:href="@{/catalogo/listado}" th:text="#{carrito.seguirComprando}"></a>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

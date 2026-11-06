@@ -61,6 +61,26 @@ Abra <http://localhost:8080>. Para compilar el proyecto:
 mvn compile
 ```
 
+## Probar el carrito (HU-5)
+
+Sobre la base local `ecomoda`, ejecute los scripts `01_usuario.sql`,
+`03_prenda.sql` y `09_carrito.sql`, en ese orden, desde
+`src/main/resources/sql`. Para probar con el catálogo mínimo, agregue una
+prenda y una variante de inventario. Por ejemplo, en la misma conexión:
+
+```sql
+INSERT INTO prenda (nombre, descripcion, precio)
+VALUES ('Camiseta', 'Camiseta de algodón', 7500.00);
+
+INSERT INTO inventario (id_prenda, talla, cantidad)
+VALUES (LAST_INSERT_ID(), 'M', 5);
+```
+
+Inicie sesión como `CLIENTE`, abra `/catalogo/listado` y agregue la prenda.
+En `/carrito/listado` puede revisar el total, cambiar la cantidad o confirmar
+la eliminación de la línea. Agregar al carrito valida existencias. El
+descuento de inventario al confirmar un pedido corresponde a HU-9.
+
 ## Reglas de Git del equipo
 
 - Crear una rama por cada HU (historia de usuario).
