@@ -1,1 +1,0 @@
--- Esquema del módulo cupón (pendiente de implementar).

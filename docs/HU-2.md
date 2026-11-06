@@ -2,7 +2,7 @@
 
 ## Preparación
 
-- Ejecutar manualmente `src/main/resources/sql/01_usuario.sql` sobre MySQL local.
+- Ejecutar manualmente `src/main/resources/sql/crear_tablas.sql` sobre MySQL local.
   La aplicación no crea tablas ni ejecuta scripts automáticamente.
 - No contiene cuentas ni contraseñas de ejemplo. Registrar un CLIENTE desde
   `/registro/nuevo`. El rol ADMIN solo se asigna manualmente a una cuenta existente

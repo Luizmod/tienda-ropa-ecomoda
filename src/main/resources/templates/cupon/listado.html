@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{nav.cupones}"></h1>
+    <section th:replace="~{cupon/fragmentos :: mensajes}"></section>
+    <a class="btn btn-primary mb-3" th:href="@{/cupon/nuevo}" th:text="#{cupon.nuevo}"></a>
+    <p th:if="${cupones.empty}" th:text="#{cupon.vacio}"></p>
+    <div class="table-responsive" th:unless="${cupones.empty}">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" th:text="#{cupon.codigo}"></th>
+                    <th scope="col" th:text="#{cupon.porcentaje}"></th>
+                    <th scope="col" th:text="#{cupon.vencimiento}"></th>
+                    <th scope="col" th:text="#{cupon.estado}"></th>
+                    <th scope="col" th:text="#{cupon.acciones}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cupon : ${cupones}">
+                    <th scope="row" th:text="${cupon.codigo}"></th>
+                    <td th:text="|${cupon.porcentaje}%|"></td>
+                    <td th:text="${cupon.fechaVencimiento}"></td>
+                    <td th:text="${cupon.activo} ? #{cupon.activo} : #{cupon.inactivo}"></td>
+                    <td>
+                        <a class="btn btn-outline-primary btn-sm"
+                           th:href="@{/cupon/modifica/{id}(id=${cupon.idCupon})}" th:text="#{accion.actualizar}"></a>
+                        <a class="btn btn-outline-danger btn-sm"
+                           th:href="@{/cupon/eliminar/{id}(id=${cupon.idCupon})}" th:text="#{accion.eliminar}"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

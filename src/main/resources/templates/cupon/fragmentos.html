@@ -1,0 +1,30 @@
+<section th:fragment="mensajes">
+    <p class="alert alert-success" role="status" th:if="${todoOk}" th:text="${todoOk}"></p>
+    <p class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></p>
+</section>
+
+<form th:fragment="formulario" th:object="${formulario}" method="post"
+      th:action="${idCupon == null} ? @{/cupon/nuevo} : @{/cupon/modifica/{id}(id=${idCupon})}">
+    <div class="mb-3">
+        <label for="codigo" class="form-label" th:text="#{cupon.codigo}"></label>
+        <input class="form-control" type="text" th:field="*{codigo}" maxlength="40" required>
+    </div>
+    <div class="mb-3">
+        <label for="porcentaje" class="form-label" th:text="#{cupon.porcentaje}"></label>
+        <input class="form-control" type="number" id="porcentaje" name="porcentaje"
+               th:value="*{porcentaje}" min="0.01" max="100" step="0.01" required>
+    </div>
+    <div class="mb-3">
+        <label for="fechaVencimiento" class="form-label" th:text="#{cupon.vencimiento}"></label>
+        <input class="form-control" type="date" th:field="*{fechaVencimiento}" required>
+    </div>
+    <div class="mb-3">
+        <label for="activo" class="form-label" th:text="#{cupon.estado}"></label>
+        <select class="form-select" th:field="*{activo}" required>
+            <option value="true" th:text="#{cupon.activo}"></option>
+            <option value="false" th:text="#{cupon.inactivo}"></option>
+        </select>
+    </div>
+    <button class="btn btn-primary" type="submit" th:text="#{accion.guardar}"></button>
+    <a class="btn btn-outline-secondary" th:href="@{/cupon/listado}" th:text="#{credenciales.cancelar}"></a>
+</form>
