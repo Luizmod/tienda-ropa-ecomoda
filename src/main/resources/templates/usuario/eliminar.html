@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{usuario/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{usuario/fragmentos :: cabecera}"></header>
+<main class="perfil">
+    <h1 th:text="#{credenciales.borrar}"></h1>
+    <section class="tarjeta confirmacion">
+        <h2 th:text="#{credenciales.eliminar.pregunta}"></h2>
+        <p th:text="#{credenciales.eliminar.aviso}"></p>
+        <form th:action="@{/perfil/eliminar}" method="post" class="acciones">
+            <button class="btn btn-dark" th:text="#{credenciales.confirmar}"></button>
+            <a class="btn btn-outline-dark" th:href="@{/perfil}" th:text="#{credenciales.cancelar}"></a>
+        </form>
+    </section>
+</main>
+</body>
+</html>

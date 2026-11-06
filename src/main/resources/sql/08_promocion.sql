@@ -1,1 +1,0 @@
--- Esquema del módulo promoción (pendiente de implementar).

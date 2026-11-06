@@ -1,1 +1,0 @@
--- Esquema del módulo usuario (pendiente de implementar).

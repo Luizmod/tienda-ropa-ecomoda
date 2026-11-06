@@ -8,30 +8,30 @@ opcional y permanece desactivado por defecto.
 
 - JDK 21.
 - Apache Maven 3.9 o posterior.
-- MySQL 8 o posterior, iniciado localmente.
+- MySQL 8.0.16 o posterior, iniciado localmente.
 - Git.
 
 ## Crear la base de datos local
 
-1. Abra `src/main/resources/sql/00_base.sql` y sustituya
-   `CAMBIAR_CLAVE` por una clave propia para su entorno local. No use ni
-   comparta esa clave en archivos versionados.
-2. Ejecute el script con una cuenta administradora de MySQL, por ejemplo:
+En MySQL Workbench, conéctese con una cuenta administradora, abra
+`src/main/resources/sql/crear_tablas.sql` y ejecute todo el archivo. Crea
+`ecomoda` con las 17 tablas de las 15 historias de usuario, incluidas las
+de los módulos que aún están pendientes en la aplicación. Se puede volver a
+ejecutar sobre el esquema del avance 2 y conserva los datos existentes.
 
-   ```bash
-   mysql -u root -p < src/main/resources/sql/00_base.sql
-   ```
+Pedidos y seguimiento usan los mismos estados: `PENDIENTE`, `PROCESANDO`,
+`ENVIADO`, `ENTREGADO` y `CANCELADO`. La categoría se puede asignar a las
+prendas que ya estaban en el catálogo.
 
-El script crea la base `ecomoda`, codificada en `utf8mb4`, el usuario local
-`ecomoda_dev` y sus permisos. Los scripts de módulos restantes contienen solo
-comentarios de cabecera por ahora.
+Si necesita una cuenta para la aplicación, créela aparte en **Users and
+Privileges** de Workbench. Conceda permisos `SELECT`, `INSERT`, `UPDATE` y
+`DELETE` sobre `ecomoda`.
 
 ## Configuración local
 
 Copie `src/main/resources/application-example.properties` como
 `src/main/resources/application-local.properties` y configure allí el usuario,
-la clave y la URL de MySQL de su entorno. Use la clave que asignó al usuario
-`ecomoda_dev` en el paso anterior. Este archivo está excluido de Git.
+la clave y la URL de MySQL de su entorno. Este archivo está excluido de Git.
 
 Para iniciar con ese perfil, ejecute:
 
@@ -60,3 +60,36 @@ Abra <http://localhost:8080>. Para compilar el proyecto:
 ```bash
 mvn compile
 ```
+
+## Probar el carrito (HU-5)
+
+Después de crear las tablas, agregue una prenda y una variante de inventario.
+Por ejemplo, en la misma conexión:
+
+```sql
+USE ecomoda;
+
+INSERT INTO prenda (nombre, descripcion, precio)
+VALUES ('Camiseta', 'Camiseta de algodón', 7500.00);
+
+INSERT INTO inventario (id_prenda, talla, cantidad)
+VALUES (LAST_INSERT_ID(), 'M', 5);
+```
+
+Inicie sesión como `CLIENTE`, abra `/catalogo/listado` y agregue la prenda.
+En `/carrito/listado` puede revisar el total, cambiar la cantidad o confirmar
+la eliminación de la línea. Agregar al carrito valida existencias. El
+descuento de inventario al confirmar un pedido corresponde a HU-9.
+
+## Probar cupones (HU-12)
+
+Inicie sesión con una cuenta de rol `ADMIN` y abra `/cupon/listado`.
+Puede crear, modificar y eliminar cupones desde esa pantalla.
+
+## Reglas de Git del equipo
+
+- Crear una rama por cada HU (historia de usuario).
+- Escribir los mensajes de commit en español.
+- Abrir un pull request obligatorio para revisar e integrar cada HU.
+- No subir credenciales, claves, archivos `application-local.properties` ni
+  JSON de Firebase.

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{accion.confirmar}"></h1>
+    <p th:text="#{cupon.confirmar(${cupon.codigo})}"></p>
+    <form th:action="@{/cupon/eliminar/{id}(id=${cupon.idCupon})}" method="post">
+        <button class="btn btn-danger" type="submit" th:text="#{accion.eliminar}"></button>
+        <a class="btn btn-outline-secondary" th:href="@{/cupon/listado}" th:text="#{credenciales.cancelar}"></a>
+    </form>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

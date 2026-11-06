@@ -1,1 +1,0 @@
--- Esquema del módulo prenda (pendiente de implementar).
