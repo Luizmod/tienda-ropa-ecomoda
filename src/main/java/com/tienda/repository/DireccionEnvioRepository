@@ -1,0 +1,13 @@
+package com.tienda.repository;
+
+import com.tienda.domain.DireccionEnvio;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface DireccionEnvioRepository extends JpaRepository<DireccionEnvio, Long> {
+
+    List<DireccionEnvio> findByUsuarioIdUsuario(Long idUsuario);
+
+    List<DireccionEnvio> findByUsuarioIdUsuarioAndActivaTrue(Long idUsuario);
+}
