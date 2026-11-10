@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecomoda - Registrar Consulta</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f7f4ee; margin: 0; color: #222; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card-container { background: #fff; border: 1px solid #e0d7cd; border-radius: 12px; padding: 40px; width: 100%; max-width: 550px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); box-sizing: border-box; }
+        h1 { font-size: 1.8rem; font-weight: normal; color: #1a1a1a; margin-top: 0; margin-bottom: 25px; font-family: 'Georgia', serif; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 8px; font-weight: 500; }
+        input[type="text"], input[type="email"], textarea { width: 100%; padding: 12px 16px; border: 1px solid #d5ccc0; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; background-color: #fff; color: #333; outline: none; }
+        input:focus, textarea:focus { border-color: #2b2825; }
+        textarea { resize: vertical; min-height: 120px; }
+        .btn-container { display: flex; gap: 12px; margin-top: 30px; align-items: center; }
+        .btn-submit { background-color: #2b2825; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
+        .btn-submit:hover { background-color: #444; }
+        .btn-cancelar { background: transparent; border: 1px solid #d5ccc0; color: #333; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: inline-block; font-size: 0.95rem; text-align: center; }
+        .btn-cancelar:hover { background-color: #f7f4ee; }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <h1>Registrar consulta</h1>
+        
+        <form th:action="@{/consulta/guardar}" th:object="${consulta}" method="POST">
+            
+            <input type="hidden" th:field="*{idConsulta}"/>
+            <input type="hidden" th:field="*{idUsuario}" value="1"/>
+
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" th:field="*{correo}" placeholder="correo@ejemplo.com" required />
+            </div>
+
+            <div class="form-group">
+                <label>Asunto</label>
+                <input type="text" th:field="*{asunto}" placeholder="Escribe el asunto" required />
+            </div>
+
+            <div class="form-group">
+                <label>Mensaje</label>
+                <textarea th:field="*{mensaje}" placeholder="Escribe tu consulta" required></textarea>
+            </div>
+
+            <input type="hidden" th:field="*{estado}" />
+            <input type="hidden" th:field="*{respuesta}" />
+
+            <div class="btn-container">
+                <button type="submit" class="btn-submit">Enviar consulta</button>
+                <a th:href="@{/consulta/listado}" class="btn-cancelar">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

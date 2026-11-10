@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{usuario/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{usuario/fragmentos :: cabecera}"></header>
+<main class="perfil">
+    <h1 th:text="#{credenciales.perfil}"></h1>
+    <p th:text="#{credenciales.perfil.ayuda}"></p>
+    <nav th:replace="~{usuario/fragmentos :: pestanas}"></nav>
+    <section th:replace="~{usuario/fragmentos :: mensajes}"></section>
+    <section th:replace="~{usuario/fragmentos :: datos}"></section>
+</main>
+</body>
+</html>

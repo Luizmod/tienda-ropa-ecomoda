@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{usuario/fragmentos :: head}"></head>
+<body>
+<main class="acceso">
+    <aside th:replace="~{usuario/fragmentos :: marca}"></aside>
+    <section class="formulario-acceso">
+        <h2 th:text="#{credenciales.ingresar}"></h2>
+        <p th:text="#{credenciales.login.ayuda}"></p>
+        <section th:replace="~{usuario/fragmentos :: mensajes}"></section>
+        <p th:if="${param.error}" class="alert alert-danger" role="alert" th:text="#{credenciales.login.error}"></p>
+        <p th:if="${param.salida}" class="alert alert-success" role="status" th:text="#{credenciales.salida.ok}"></p>
+        <p th:if="${param.actualizado}" class="alert alert-success" role="status" th:text="#{credenciales.modificar.ok}"></p>
+        <p th:if="${param.eliminado}" class="alert alert-success" role="status" th:text="#{credenciales.eliminar.ok}"></p>
+        <form th:action="@{/login}" method="post">
+            <label for="correo" th:text="#{credenciales.correo}"></label>
+            <input class="form-control" id="correo" name="correo" type="email" maxlength="254" autocomplete="username" required>
+            <label for="contrasena" th:text="#{credenciales.contrasena}"></label>
+            <input class="form-control" id="contrasena" name="contrasena" type="password" autocomplete="current-password" required>
+            <button class="btn btn-dark w-100 mt-4" th:text="#{credenciales.ingresar}"></button>
+        </form>
+        <a class="d-block mt-4" th:href="@{/registro/nuevo}" th:text="#{credenciales.crear}"></a>
+    </section>
+</main>
+</body>
+</html>

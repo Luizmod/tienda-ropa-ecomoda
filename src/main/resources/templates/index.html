@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+    <!-- Reemplaza este <head> por el fragmento "head" (CSS, meta, título, etc.) -->
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+    <body>
+        <!-- Encabezado/menú común a todas las páginas -->
+        <header th:replace="~{general/fragmentos :: header}"></header>
+
+        <main class="container py-4">
+            <h1 th:text="#{aplicacion.titulo}"></h1>
+            <p class="lead" th:text="#{index.lema}"></p>
+        </main>
+
+        <!-- Pie de página común -->
+        <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    </body>
+</html>

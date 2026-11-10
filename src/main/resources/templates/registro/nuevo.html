@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{usuario/fragmentos :: head}"></head>
+<body>
+<main class="acceso">
+    <aside th:replace="~{usuario/fragmentos :: marca}"></aside>
+    <section class="formulario-acceso">
+        <h2 th:text="#{credenciales.crear}"></h2>
+        <p th:text="#{credenciales.registro.ayuda}"></p>
+        <section th:replace="~{usuario/fragmentos :: mensajes}"></section>
+        <form th:action="@{/registro/guardar}" method="post">
+            <label for="correo" th:text="#{credenciales.correo}"></label>
+            <input class="form-control" id="correo" name="correo" type="email" maxlength="254" autocomplete="username" required>
+            <label for="contrasena" th:text="#{credenciales.contrasena}"></label>
+            <input class="form-control" id="contrasena" name="contrasena" type="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+            <label for="confirmacion" th:text="#{credenciales.confirmacion}"></label>
+            <input class="form-control" id="confirmacion" name="confirmacion" type="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+            <button class="btn btn-dark w-100 mt-4" th:text="#{credenciales.registrarse}"></button>
+        </form>
+        <a class="d-block mt-4" th:href="@{/login}" th:text="#{credenciales.ingresar}"></a>
+        <a class="d-block mt-3" th:href="@{/}" th:text="#{credenciales.cancelar}"></a>
+    </section>
+</main>
+</body>
+</html>

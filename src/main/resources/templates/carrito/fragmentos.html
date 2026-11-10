@@ -1,0 +1,7 @@
+<section th:fragment="mensajes">
+    <p class="alert alert-success" role="status" th:if="${todoOk}" th:text="${todoOk}"></p>
+    <p class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></p>
+</section>
+
+<a th:fragment="cancelar" class="btn btn-outline-secondary"
+   th:href="@{/carrito/listado}" th:text="#{credenciales.cancelar}"></a>
