@@ -1,0 +1,16 @@
+<form th:fragment="formulario" method="post" th:action="@{/consulta/guardar}" th:object="${formulario}">
+    <input type="hidden" th:field="*{idConsulta}">
+    <div class="mb-3">
+        <label for="correo" class="form-label" th:text="#{credenciales.correo}"></label>
+        <input id="correo" type="email" class="form-control" th:field="*{correo}" maxlength="254" required>
+    </div>
+    <div class="mb-3">
+        <label for="asunto" class="form-label" th:text="#{consulta.asunto}"></label>
+        <input id="asunto" class="form-control" th:field="*{asunto}" maxlength="150" required>
+    </div>
+    <div class="mb-3">
+        <label for="mensaje" class="form-label" th:text="#{consulta.mensaje}"></label>
+        <textarea id="mensaje" class="form-control" th:field="*{mensaje}" maxlength="8000" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" th:text="#{accion.guardar}"></button>
+</form>

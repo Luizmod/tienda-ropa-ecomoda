@@ -1,0 +1,11 @@
+<div th:fragment="campos">
+    <input type="hidden" th:field="*{idCategoria}">
+    <div class="mb-3">
+        <label for="nombre" class="form-label" th:text="#{categoria.nombre}"></label>
+        <input id="nombre" class="form-control" th:field="*{nombre}" maxlength="120" required>
+    </div>
+    <div class="mb-3">
+        <label for="descripcion" class="form-label" th:text="#{categoria.descripcion}"></label>
+        <textarea id="descripcion" class="form-control" th:field="*{descripcion}" maxlength="500" required></textarea>
+    </div>
+</div>

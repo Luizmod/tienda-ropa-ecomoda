@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 th:text="#{nav.direcciones}"></h1>
+        <a class="btn btn-primary" th:href="@{/direccion/nuevo}" th:text="#{direccion.nuevo}"></a>
+    </div>
+    <section th:replace="~{general/gestion :: mensajes}"></section>
+    <p th:if="${registros.empty}" th:text="#{direccion.vacio}"></p>
+    <div class="table-responsive" th:unless="${registros.empty}">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" th:text="#{direccion.exacta}"></th>
+                    <th scope="col" th:text="#{direccion.ubicacion}"></th>
+                    <th scope="col" th:text="#{direccion.telefono}"></th>
+                    <th scope="col" th:text="#{accion.acciones}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="registro : ${registros}">
+                    <th scope="row" th:text="${registro.direccionExacta}"></th>
+                    <td th:text="|${registro.provincia}, ${registro.canton}, ${registro.distrito}|"></td>
+                    <td th:text="${registro.telefono}"></td>
+                    <td>
+                        <div th:replace="~{general/gestion :: acciones(
+                                @{/direccion/modificar/{id}(id=${registro.idDireccion})},
+                                @{/direccion/eliminar/{id}(id=${registro.idDireccion})}, #{direccion.confirmar})}"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

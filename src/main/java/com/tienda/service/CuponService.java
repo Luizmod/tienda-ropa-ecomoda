@@ -3,6 +3,7 @@ package com.tienda.service;
 import com.tienda.domain.Cupon;
 import com.tienda.dto.CuponFormulario;
 import com.tienda.repository.CuponRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,10 @@ public class CuponService {
 
     public List<Cupon> listar() {
         return repositorio.findAllByOrderByCodigoAsc();
+    }
+
+    public List<Cupon> listarVigentes() {
+        return repositorio.findByActivoTrueAndFechaVencimientoGreaterThanEqualOrderByCodigoAsc(LocalDate.now());
     }
 
     public Cupon consultar(Long idCupon) {

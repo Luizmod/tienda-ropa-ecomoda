@@ -1,0 +1,26 @@
+<div th:fragment="campos">
+    <input type="hidden" th:field="*{idPromocion}">
+    <div class="mb-3">
+        <label for="nombre" class="form-label" th:text="#{promocion.nombre}"></label>
+        <input id="nombre" class="form-control" th:field="*{nombre}" maxlength="120" required>
+    </div>
+    <div class="mb-3">
+        <label for="descripcion" class="form-label" th:text="#{promocion.descripcion}"></label>
+        <textarea id="descripcion" class="form-control" th:field="*{descripcion}" maxlength="500" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="porcentaje" class="form-label" th:text="#{cupon.porcentaje}"></label>
+        <input id="porcentaje" name="porcentaje" type="number" step="0.01" min="0.01" max="100"
+               class="form-control" th:value="*{porcentaje}" required>
+    </div>
+    <div class="row">
+        <div class="col-sm mb-3">
+            <label for="fechaInicio" class="form-label" th:text="#{promocion.inicio}"></label>
+            <input id="fechaInicio" type="date" class="form-control" th:field="*{fechaInicio}" required>
+        </div>
+        <div class="col-sm mb-3">
+            <label for="fechaFin" class="form-label" th:text="#{promocion.fin}"></label>
+            <input id="fechaFin" type="date" class="form-control" th:field="*{fechaFin}" required>
+        </div>
+    </div>
+</div>

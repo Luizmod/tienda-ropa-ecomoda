@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 th:text="#{nav.metodosPago}"></h1>
+        <a class="btn btn-primary" th:href="@{/metodopago/nuevo}" th:text="#{metodopago.nuevo}"></a>
+    </div>
+    <section th:replace="~{general/gestion :: mensajes}"></section>
+    <p th:if="${registros.empty}" th:text="#{metodopago.vacio}"></p>
+    <div class="table-responsive" th:unless="${registros.empty}">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" th:text="#{metodopago.tipo}"></th>
+                    <th scope="col" th:text="#{metodopago.detalle}"></th>
+                    <th scope="col" th:text="#{accion.acciones}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="registro : ${registros}">
+                    <th scope="row" th:text="${#messages.msg('metodopago.tipo.' + registro.tipo.name())}"></th>
+                    <td>
+                        <span th:if="${registro.ultimosCuatro != null}" th:text="|${registro.titular} · •••• ${registro.ultimosCuatro}|"></span>
+                        <span th:if="${registro.telefonoSinpe != null}" th:text="${registro.telefonoSinpe}"></span>
+                    </td>
+                    <td>
+                        <div th:replace="~{general/gestion :: acciones(
+                                @{/metodopago/modificar/{id}(id=${registro.idMetodoPago})},
+                                @{/metodopago/eliminar/{id}(id=${registro.idMetodoPago})}, #{metodopago.confirmar})}"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

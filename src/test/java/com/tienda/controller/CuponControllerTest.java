@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,6 +33,22 @@ class CuponControllerTest {
     @Autowired private MockMvc mvc;
     @MockitoBean private CuponService servicio;
     @MockitoBean private UsuarioDetailsService detalles;
+
+    @Test
+    void visitantePuedeVerCuponesVigentesSinAccionesDeAdministracion() throws Exception {
+        Cupon cupon = new Cupon();
+        ReflectionTestUtils.setField(cupon, "idCupon", 7L);
+        cupon.actualizar("MODA", DESCUENTO, VENCIMIENTO, true);
+        when(servicio.listarVigentes()).thenReturn(List.of(cupon));
+
+        mvc.perform(get("/cupon/listado"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("MODA")))
+                .andExpect(content().string(not(containsString("/cupon/modifica/7"))));
+        mvc.perform(get("/cupon/nuevo")).andExpect(redirectedUrl("/login"));
+        verify(servicio).listarVigentes();
+        verify(servicio, never()).listar();
+    }
 
     @Test
     void administradorPuedeListarYEditar() throws Exception {

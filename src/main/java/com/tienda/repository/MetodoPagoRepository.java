@@ -1,15 +1,11 @@
 package com.tienda.repository;
 
 import com.tienda.domain.MetodoPago;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface MetodoPagoRepository extends JpaRepository<MetodoPago, Long> {
-
-    List<MetodoPago> findByUsuarioIdUsuario(Long idUsuario);
-
-    List<MetodoPago> findByUsuarioIdUsuarioAndActivoTrue(Long idUsuario);
-
-    List<MetodoPago> findByTipoPagoContainingIgnoreCase(String tipoPago);
+    List<MetodoPago> findByUsuarioIdUsuarioOrderByIdMetodoPagoAsc(Long idUsuario);
+    Optional<MetodoPago> findByIdMetodoPagoAndUsuarioIdUsuario(Long idMetodoPago, Long idUsuario);
 }

@@ -13,6 +13,20 @@
         <main class="container py-4">
             <h1 th:text="#{aplicacion.titulo}"></h1>
             <p class="lead" th:text="#{index.lema}"></p>
+            <section th:if="${promociones != null and !promociones.empty}" class="mt-4">
+                <h2 th:text="#{promocion.destacadas}"></h2>
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+                    <article class="col" th:each="promocion : ${promociones}">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="h5" th:text="${promocion.nombre}"></h3>
+                                <p th:text="${promocion.descripcion}"></p>
+                                <p class="fw-semibold" th:text="${promocion.descuentoFormateado}"></p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </main>
 
         <!-- Pie de página común -->

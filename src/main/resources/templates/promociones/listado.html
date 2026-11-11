@@ -1,75 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Promociones - Administrador</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f7f4ee; margin: 0; display: flex; }
-        .sidebar { width: 220px; background-color: #2b2825; color: #fff; min-height: 100vh; padding: 25px 20px; box-sizing: border-box; }
-        
-        .sidebar .brand { font-family: 'Georgia', 'Garamond', 'Times New Roman', serif; font-size: 1.6rem; font-weight: normal; margin-bottom: 5px; }
-        
-        .sidebar .sub-title { font-size: 0.7rem; color: #9c958f; letter-spacing: 1px; margin-bottom: 35px; }
-        .sidebar a { display: block; color: #c2bbb3; text-decoration: none; padding: 10px 0; font-size: 0.95rem; }
-        .sidebar a.active { color: #2b2825; background: #d9cfc1; padding: 8px 12px; border-radius: 8px; font-weight: 600; }
-        .main-content { flex: 1; padding: 40px; box-sizing: border-box; }
-        .top-path { font-size: 0.75rem; color: #777; text-transform: uppercase; margin-bottom: 20px; }
-        .header-flex { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
-        h1 { margin: 0 0 5px 0; font-size: 2rem; font-weight: normal; color: #222; }
-        .subtitle { color: #666; margin: 0; font-size: 0.95rem; }
-        .btn-registrar { background-color: #222; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 0.9rem; }
-        .card-container { background: #fff; border: 1px solid #e0d7cd; border-radius: 12px; padding: 24px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { font-size: 0.7rem; text-transform: uppercase; color: #888; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        td { padding: 18px 0; border-bottom: 1px solid #f2ece4; font-size: 0.9rem; color: #333; }
-        .btn-accion { border: 1px solid #d5ccc0; background: transparent; padding: 6px 16px; border-radius: 6px; cursor: pointer; color: #333; text-decoration: none; display: inline-block; margin-right: 5px; font-size: 0.85rem; }
-    </style>
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{general/fragmentos :: head}"></head>
 <body>
-    <div class="sidebar">
-        <div class="brand">Ecomoda</div>
-        <div class="sub-title">ADMINISTRACIÓN</div>
-        <a th:href="@{/}">Panel</a>
-        <a href="@{/prenda/listado}">Prendas</a>
-        <a th:href="@{/categoria/listado}">Categorias</a>
-        <a href="@{/inventario/listado}">Inventario</a>
-        <a href="@{/pedido/listado}">Pedidos</a>
-        <a href="@{/cupon/listado}">Cupones</a>
-        <a href="@{/}" class="active">Promociones</a>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 th:text="#{promocion.destacadas}"></h1>
+        <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary"
+           th:href="@{/promocion/nuevo}" th:text="#{promocion.nueva}"></a>
     </div>
-    <div class="main-content">
-        <div class="header-flex">
-            <div>
-                <h1>Promociones destacadas</h1>
-                <p class="subtitle">Las activas aparecen en el inicio</p>
-            </div>
-            <a th:href="@{/promocion/nuevo}" class="btn-registrar">Registrar promoción</a>
-        </div>
-        <div class="card-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>NOMBRE</th>
-                        <th>DESCRIPCIÓN</th>
-                        <th>DESCUENTO</th>
-                        <th>VIGENCIA</th>
-                        <th>ACCIONES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="promo : ${promociones}">
-                        <td th:text="${promo.nombre}"></td>
-                        <td th:text="${promo.descripcion}"></td>
-                        <td th:text="${promo.getDescuentoFormateado()}"></td>
-                        <td th:text="${promo.getVigenciaFormateada()}"></td>
-                        <td>
-                            <a th:href="@{/promocion/modificar/{id}(id=${promo.idPromocion})}" class="btn-accion">Modificar</a>
-                            <a th:href="@{/promocion/eliminar/{id}(id=${promo.idPromocion})}" class="btn-accion">Borrar</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <section th:replace="~{general/gestion :: mensajes}"></section>
+    <p th:if="${promociones.empty}" th:text="#{promocion.vacio}"></p>
+    <div class="table-responsive" th:unless="${promociones.empty}">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" th:text="#{promocion.nombre}"></th>
+                    <th scope="col" th:text="#{promocion.descripcion}"></th>
+                    <th scope="col" th:text="#{promocion.descuento}"></th>
+                    <th scope="col" th:text="#{promocion.vigencia}"></th>
+                    <th sec:authorize="hasRole('ADMIN')" scope="col" th:text="#{accion.acciones}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="promocion : ${promociones}">
+                    <th scope="row" th:text="${promocion.nombre}"></th>
+                    <td th:text="${promocion.descripcion}"></td>
+                    <td th:text="${promocion.descuentoFormateado}"></td>
+                    <td th:text="${promocion.vigenciaFormateada}"></td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <div th:replace="~{general/gestion :: acciones(
+                                @{/promocion/modificar/{id}(id=${promocion.idPromocion})},
+                                @{/promocion/eliminar/{id}(id=${promocion.idPromocion})},
+                                #{promocion.confirmarBorrado})}"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
 </body>
 </html>

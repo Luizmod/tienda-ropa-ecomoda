@@ -1,0 +1,24 @@
+<div th:fragment="campos">
+    <div class="mb-3">
+        <label for="tipo" class="form-label" th:text="#{metodopago.tipo}"></label>
+        <select id="tipo" class="form-select" th:field="*{tipo}" required>
+            <option value="" th:text="#{metodopago.elegir}"></option>
+            <option th:each="opcion : ${tipos}" th:value="${opcion}"
+                    th:text="${#messages.msg('metodopago.tipo.' + opcion.name())}"></option>
+        </select>
+    </div>
+    <p class="form-text" th:text="#{metodopago.ayuda}"></p>
+    <div class="mb-3">
+        <label for="titular" class="form-label" th:text="#{metodopago.titular}"></label>
+        <input id="titular" class="form-control" th:field="*{titular}" maxlength="120">
+    </div>
+    <div class="mb-3">
+        <label for="ultimosCuatro" class="form-label" th:text="#{metodopago.ultimosCuatro}"></label>
+        <input id="ultimosCuatro" class="form-control" th:field="*{ultimosCuatro}"
+               inputmode="numeric" maxlength="4" pattern="[0-9]{4}">
+    </div>
+    <div class="mb-3">
+        <label for="telefonoSinpe" class="form-label" th:text="#{metodopago.telefonoSinpe}"></label>
+        <input id="telefonoSinpe" type="tel" class="form-control" th:field="*{telefonoSinpe}" maxlength="20">
+    </div>
+</div>

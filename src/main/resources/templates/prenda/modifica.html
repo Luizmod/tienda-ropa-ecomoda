@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div class="col-lg-7">
+        <h1 th:text="${id == null} ? #{prenda.nuevo} : #{prenda.editar}"></h1>
+        <section th:replace="~{general/gestion :: mensajes}"></section>
+        <form method="post" enctype="multipart/form-data" th:object="${formulario}"
+              th:action="${id == null} ? @{/prenda/nuevo} : @{/prenda/modificar/{id}(id=${id})}">
+            <div th:replace="~{prenda/fragmentos :: campos}"></div>
+            <button class="btn btn-primary" type="submit" th:text="#{accion.guardar}"></button>
+            <a class="btn btn-outline-secondary" th:href="@{/prenda/listado}" th:text="#{credenciales.cancelar}"></a>
+        </form>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>
