@@ -29,7 +29,7 @@
         @Bean
         public LocaleResolver localeResolver() {
             var slr = new SessionLocaleResolver();
-            slr.setDefaultLocale(Locale.getDefault());
+            slr.setDefaultLocale(Locale.forLanguageTag("es"));
             slr.setLocaleAttributeName("session.current.locale");
             slr.setTimeZoneAttributeName("session.current.timezone");
             return slr;
@@ -52,6 +52,7 @@
             ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
             messageSource.setBasename("messages");
             messageSource.setDefaultEncoding("UTF-8");
+            messageSource.setFallbackToSystemLocale(false);
             return messageSource;
         }
     }

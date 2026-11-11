@@ -26,6 +26,9 @@ public class Cupon {
     @Column(nullable = false)
     private boolean activo;
 
+    @Column(name = "id_usuario")
+    private Long idUsuario;
+
     public Cupon() {
     }
 

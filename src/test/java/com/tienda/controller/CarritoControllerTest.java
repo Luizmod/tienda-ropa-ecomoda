@@ -1,15 +1,19 @@
 package com.tienda.controller;
 
 import com.tienda.SecurityConfig;
+import com.tienda.domain.Cupon;
 import com.tienda.domain.Inventario;
 import com.tienda.domain.LineaCarrito;
 import com.tienda.domain.Prenda;
 import com.tienda.domain.Rol;
 import com.tienda.domain.Usuario;
+import com.tienda.dto.LineaCarritoVista;
+import com.tienda.repository.CuponRepository;
 import com.tienda.repository.InventarioRepository;
 import com.tienda.repository.LineaCarritoRepository;
 import com.tienda.repository.UsuarioRepository;
 import com.tienda.service.CarritoService;
+import com.tienda.service.CuponService;
 import com.tienda.service.UsuarioAutenticado;
 import com.tienda.service.UsuarioDetailsService;
 import java.math.BigDecimal;
@@ -31,11 +35,12 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CarritoController.class)
-@Import({SecurityConfig.class, CarritoService.class})
+@Import({SecurityConfig.class, CarritoService.class, CuponService.class})
 class CarritoControllerTest {
     @Autowired private MockMvc mvc;
     @Autowired private PasswordEncoder claves;
@@ -43,6 +48,7 @@ class CarritoControllerTest {
     @MockitoBean private LineaCarritoRepository lineas;
     @MockitoBean private UsuarioRepository usuarios;
     @MockitoBean private UsuarioDetailsService detalles;
+    @MockitoBean private CuponRepository cupones;
 
     @BeforeEach
     void prepararInventario() {
@@ -116,6 +122,51 @@ class CarritoControllerTest {
                 .andExpect(model().attributeDoesNotExist("error"));
         verify(lineas).save(argThat(linea -> linea == existente && linea.getCantidad() == 3));
         verify(usuarios).bloquearPorId(9L);
+    }
+
+    @Test
+    void cuponPrivadoSoloDescuentaEnElCarritoDelTitular() throws Exception {
+        var cupon = new Cupon();
+        cupon.actualizar("CLIENTE25", new BigDecimal("25.00"), java.time.LocalDate.now().plusDays(30), true);
+        ReflectionTestUtils.setField(cupon, "idUsuario", 9L);
+        var linea = new LineaCarritoVista(1L, 7L, "Camiseta", "", null, "M",
+                new BigDecimal("7500.00"), 1, 3);
+        when(lineas.listarPorUsuario(9L)).thenReturn(List.of(linea));
+        when(lineas.listarPorUsuario(10L)).thenReturn(List.of(linea));
+        when(cupones.findByCodigoAndActivoTrueAndFechaVencimientoGreaterThanEqual(eq("CLIENTE25"), any()))
+                .thenReturn(Optional.of(cupon));
+        when(cupones.findByIdUsuarioAndActivoTrueAndFechaVencimientoGreaterThanEqualOrderByCodigoAsc(eq(9L), any()))
+                .thenReturn(List.of(cupon));
+        var sesion = new MockHttpSession();
+        var titular = user(cliente(9L));
+        var otro = user(cliente(10L));
+
+        mvc.perform(get("/carrito/cupon")).andExpect(redirectedUrl("/login"));
+        mvc.perform(get("/carrito/listado").with(otro))
+                .andExpect(content().string(not(containsString("CLIENTE25"))));
+        mvc.perform(post("/carrito/cupon/aplicar").with(otro).with(csrf()).param("codigo", "CLIENTE25"))
+                .andExpect(redirectedUrl("/carrito/listado")).andExpect(flash().attributeExists("error"));
+        mvc.perform(get("/carrito/listado").session(sesion).with(titular))
+                .andExpect(content().string(containsString("CLIENTE25")));
+        mvc.perform(post("/carrito/cupon/aplicar").session(sesion).with(titular).with(csrf())
+                .param("codigo", " cliente25 "))
+                .andExpect(redirectedUrl("/carrito/listado")).andExpect(flash().attributeExists("todoOk"));
+        mvc.perform(get("/carrito/compra").session(sesion).with(titular))
+                .andExpect(model().attribute("descuento", new BigDecimal("1875.00")))
+                .andExpect(model().attribute("total", new BigDecimal("5625.00")));
+        mvc.perform(post("/carrito/cupon/quitar").session(sesion).with(titular).with(csrf()))
+                .andExpect(redirectedUrl("/carrito/listado"));
+        mvc.perform(get("/carrito/listado").session(sesion).with(titular))
+                .andExpect(model().attribute("total", new BigDecimal("7500.00")));
+    }
+
+    private UsuarioAutenticado cliente(long id) {
+        var usuario = new Usuario();
+        usuario.setIdUsuario(id);
+        usuario.setCorreo("cliente" + id + "@example.com");
+        usuario.setContrasena("prueba");
+        usuario.setRol(Rol.CLIENTE);
+        return new UsuarioAutenticado(usuario);
     }
 
     private void agregar(MockHttpSession sesion) throws Exception {

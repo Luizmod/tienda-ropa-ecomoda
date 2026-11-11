@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" th:lang="${#locale.toLanguageTag()}" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{usuario/fragmentos :: head}"></head>
 <body>
-<header th:replace="~{usuario/fragmentos :: cabecera}"></header>
-<main class="perfil">
-    <h1 th:text="#{credenciales.perfil}"></h1>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div th:replace="~{usuario/fragmentos :: titulo}"></div>
     <nav th:replace="~{usuario/fragmentos :: pestanas}"></nav>
     <section th:replace="~{usuario/fragmentos :: mensajes}"></section>
     <div class="perfil-columnas">
-        <section th:replace="~{usuario/fragmentos :: datos}"></section>
-        <section class="tarjeta">
+        <section th:replace="~{usuario/fragmentos :: datos(false)}"></section>
+        <section class="card p-4">
             <h2 th:text="#{credenciales.modificar}"></h2>
             <p th:text="#{credenciales.modificar.ayuda}"></p>
             <form th:action="@{/perfil/guardar}" method="post">
@@ -22,12 +22,13 @@
                 <label for="confirmacion" th:text="#{credenciales.confirmacion}"></label>
                 <input class="form-control" id="confirmacion" name="confirmacion" type="password" minlength="8" maxlength="72" autocomplete="new-password">
                 <div class="acciones mt-4">
-                    <button class="btn btn-dark" th:text="#{credenciales.guardar}"></button>
-                    <a class="btn btn-outline-dark" th:href="@{/perfil}" th:text="#{credenciales.cancelar}"></a>
+                    <button class="btn btn-primary" th:text="#{credenciales.guardar}"></button>
+                    <a class="btn btn-outline-secondary" th:href="@{/perfil}" th:text="#{credenciales.cancelar}"></a>
                 </div>
             </form>
         </section>
     </div>
 </main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
 </body>
 </html>

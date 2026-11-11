@@ -1,0 +1,188 @@
+:root {
+    --crema: #f4f1ea;
+    --beige: #d9c9b6;
+    --oscuro: #272522;
+    --borde: #e2d9cd;
+    --bs-body-bg: var(--crema);
+    --bs-body-color: var(--oscuro);
+    --bs-link-color-rgb: 58, 51, 44;
+    --bs-link-hover-color-rgb: 103, 77, 51;
+    --bs-border-color: var(--borde);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, .logotipo, .promocion-descuento {
+    font-family: Georgia, serif;
+}
+
+h1 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+h2 { font-size: clamp(1.35rem, 2.5vw, 1.75rem); }
+
+.tienda-cabecera { border-bottom: 1px solid var(--borde); }
+.tienda-cabecera .navbar { padding-block: .8rem; }
+.tienda-cabecera .logotipo { font-size: 1.65rem; }
+.tienda-cabecera .logotipo i { font-size: .78em; }
+.tienda-cabecera .nav-link { font-size: .9rem; color: var(--oscuro); }
+.tienda-cabecera .nav-link:hover { text-decoration: underline; text-underline-offset: .3em; }
+.tienda-cabecera .navbar-nav { flex-wrap: wrap; }
+
+.tienda-pie {
+    margin-top: auto;
+    padding-block: 2rem 1rem;
+    font-size: .85rem;
+}
+
+.portada {
+    display: grid;
+    grid-template-columns: 57fr 43fr;
+    overflow: hidden;
+    border-radius: .75rem;
+    background: var(--oscuro);
+    color: var(--crema);
+}
+
+.portada-texto {
+    align-self: center;
+    padding: clamp(2rem, 5vw, 4rem);
+}
+
+.portada h1 {
+    max-width: 15ch;
+    font-size: clamp(2.4rem, 5vw, 4.75rem);
+    line-height: 1.04;
+}
+
+.portada p { color: var(--beige); margin-block: 1rem 1.5rem; }
+.portada-imagen { display: grid; place-items: center; background: #d4c5b1; }
+.portada-imagen img { display: block; width: 100%; height: auto; }
+.promocion-descuento { font-size: 2rem; white-space: nowrap; }
+
+.btn-primary {
+    --bs-btn-bg: var(--oscuro);
+    --bs-btn-border-color: var(--oscuro);
+    --bs-btn-hover-bg: #47413a;
+    --bs-btn-hover-border-color: #47413a;
+    --bs-btn-active-bg: #47413a;
+    --bs-btn-active-border-color: #47413a;
+    --bs-btn-focus-shadow-rgb: 93, 75, 54;
+}
+
+.btn-outline-primary, .btn-outline-secondary {
+    --bs-btn-color: var(--oscuro);
+    --bs-btn-border-color: #b6a692;
+    --bs-btn-hover-color: var(--oscuro);
+    --bs-btn-hover-bg: var(--beige);
+    --bs-btn-hover-border-color: var(--beige);
+    --bs-btn-active-color: var(--oscuro);
+    --bs-btn-active-bg: var(--beige);
+    --bs-btn-active-border-color: var(--beige);
+    --bs-btn-focus-shadow-rgb: 93, 75, 54;
+}
+
+.btn-beige {
+    --bs-btn-color: var(--oscuro);
+    --bs-btn-bg: var(--beige);
+    --bs-btn-hover-color: var(--oscuro);
+    --bs-btn-hover-bg: #eee4d6;
+    --bs-btn-active-color: var(--oscuro);
+    --bs-btn-active-bg: #eee4d6;
+    --bs-btn-focus-shadow-rgb: 217, 201, 182;
+}
+
+.card, .modal-content {
+    background: #fff;
+    border-color: var(--borde);
+}
+
+.card-header {
+    background: #ece5db;
+    border-color: var(--borde);
+}
+
+.table-responsive {
+    border: 1px solid var(--borde);
+    border-radius: .5rem;
+}
+
+.table {
+    --bs-table-bg: #fff;
+    --bs-table-striped-bg: #faf8f4;
+    --bs-table-border-color: var(--borde);
+    margin-bottom: 0;
+}
+
+.table thead th { background: #eee8de; font-size: .875rem; }
+.table > :not(caption) > * > * { padding: .85rem; }
+.form-control, .form-select { background-color: #fff; }
+.form-control:focus, .form-select:focus {
+    background-color: #fff;
+    border-color: #9e8467;
+    box-shadow: 0 0 0 .2rem rgb(158 132 103 / 25%);
+}
+
+.catalogo-prenda { overflow: hidden; padding: .45rem; }
+.catalogo-imagen {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    background: #eee6db;
+    border-radius: .35rem;
+    color: #7a6856;
+    font-size: 2.5rem;
+    overflow: hidden;
+}
+
+.catalogo-imagen img {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    min-height: 0;
+}
+
+.catalogo-datos { display: flex; justify-content: space-between; gap: .5rem; }
+.carrito-columnas { display: grid; gap: 1.25rem; align-items: start; }
+.carrito-resumen .btn-primary { width: 100%; }
+.carrito-resumen input { min-width: 0; }
+
+@media (min-width: 992px) {
+    .carrito-columnas { grid-template-columns: minmax(0, 1fr) minmax(15rem, 27%); }
+
+    body:has(.tienda-admin) { padding-inline-start: 13rem; }
+    .tienda-cabecera:has(.tienda-admin) {
+        position: fixed;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: 13rem;
+        overflow-y: auto;
+        background: var(--oscuro);
+        border: 0;
+    }
+
+    .tienda-admin + .navbar .container,
+    .tienda-admin + .navbar .navbar-collapse,
+    .tienda-admin + .navbar .navbar-nav {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .tienda-admin + .navbar .logotipo { margin: .25rem .5rem 1rem; }
+    .tienda-admin + .navbar :is(.logotipo, .nav-link) { color: var(--crema); }
+    .tienda-admin + .navbar .nav-link:hover {
+        background: var(--beige);
+        color: var(--oscuro);
+        border-radius: .25rem;
+    }
+    .tienda-admin + .navbar .dropdown-menu { position: static; }
+}
+
+@media (max-width: 575px) {
+    .portada { grid-template-columns: 1fr; }
+    .portada-imagen img { width: min(100%, 24rem); }
+}

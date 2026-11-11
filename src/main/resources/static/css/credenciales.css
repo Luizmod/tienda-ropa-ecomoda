@@ -1,35 +1,32 @@
-:root { --crema: #f7f4ed; --beige: #d9c9b6; --oscuro: #292724; }
-body { margin: 0; background: var(--crema); color: var(--oscuro); }
-a { color: var(--oscuro); }
-h1, h2, .logotipo { font-family: Georgia, serif; }
-.logotipo { font-size: 2rem; text-decoration: none; }
+.marca .logotipo { font-size: 1.65rem; text-decoration: none; }
+.logotipo i { font-size: .78em; }
 .acceso { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
-.marca { background: linear-gradient(35deg, #514b43, var(--oscuro)); color: var(--crema); padding: 4rem; display: flex; flex-direction: column; justify-content: space-between; }
+.marca { background: linear-gradient(35deg, #3f3932, var(--oscuro) 65%); color: var(--crema); padding: 4rem; display: flex; flex-direction: column; justify-content: space-between; }
 .marca a { color: var(--crema); }
-.marca h1 { font-size: clamp(2.5rem, 4vw, 4.5rem); max-width: 12ch; }
+.marca h1 { font-size: clamp(2.5rem, 4vw, 4.5rem); max-width: 17ch; }
 .marca p { color: var(--beige); }
-.formulario-acceso { align-self: center; width: min(100%, 34rem); padding: 3rem; margin: auto; }
+.formulario-acceso { align-self: center; width: min(100%, 30rem); padding: 3rem; margin: auto; }
 label { display: block; margin: 1.2rem 0 .4rem; }
-.form-control { border-color: var(--beige); padding: .8rem; }
-.form-control:focus { border-color: var(--oscuro); box-shadow: 0 0 0 .15rem var(--beige); }
-.btn { padding: .7rem 1.2rem; }
+.formulario-acceso .form-control { padding: .8rem; }
+.formulario-acceso .btn { padding: .7rem 1.2rem; }
 .btn-dark { background: var(--oscuro); border-color: var(--oscuro); }
-.cabecera { display: flex; align-items: center; flex-wrap: wrap; gap: 2rem; padding: 1.5rem 4%; border-bottom: 1px solid var(--beige); }
-.cabecera form { margin-left: auto; }
-.perfil { max-width: 1200px; padding: 3rem 1.5rem; margin: auto; }
-.perfil-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.tarjeta { background: white; padding: 2rem; border: 1px solid #e5ddd2; border-radius: 1rem; }
-.tarjeta dt { margin-top: 1.5rem; }
-.tarjeta dd { overflow-wrap: anywhere; margin-top: .5rem; }
+.perfil-columnas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; align-items: start; }
+.perfil-tarjeta { max-width: 37rem; }
+.perfil-datos dt { margin-top: 1rem; font-size: .875rem; }
+.perfil-datos dd {
+    overflow-wrap: anywhere;
+    margin: .35rem 0 0;
+    padding: .55rem .75rem;
+    background: var(--crema);
+    border: 1px solid var(--borde);
+    border-radius: .375rem;
+}
 .acciones { display: flex; gap: .7rem; flex-wrap: wrap; }
-.nav-tabs { border-color: var(--beige); margin-top: 2rem; }
-.nav-tabs .nav-link { color: var(--oscuro); }
-.nav-tabs .nav-link.active { background: transparent; border-color: transparent transparent var(--oscuro); }
-.confirmacion { max-width: 40rem; margin: 2rem auto; }
+.perfil-pestanas .nav-link { color: var(--oscuro); }
+.perfil-pestanas .nav-link.active { background: transparent; border-color: transparent transparent var(--oscuro); }
 @media (max-width: 760px) {
     .acceso, .perfil-columnas { grid-template-columns: 1fr; }
     .marca { padding: 2rem; gap: 2rem; }
     .marca h1 { font-size: 2.5rem; max-width: none; }
     .formulario-acceso { padding: 2rem; }
-    .cabecera { gap: 1rem; }
 }
