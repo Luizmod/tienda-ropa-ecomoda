@@ -1,0 +1,12 @@
+<section th:fragment="mensajes">
+    <p class="alert alert-success" role="status" th:if="${todoOk}" th:text="${todoOk}"></p>
+    <p class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></p>
+</section>
+
+<div th:fragment="acciones(editar, eliminar, confirmacion)" class="d-flex flex-wrap gap-2">
+    <a class="btn btn-outline-primary btn-sm" th:href="${editar}" th:text="#{accion.actualizar}"></a>
+    <form method="post" th:action="${eliminar}" th:attr="data-confirmacion=${confirmacion}"
+          onsubmit="return confirm(this.dataset.confirmacion)">
+        <button type="submit" class="btn btn-outline-danger btn-sm" th:text="#{accion.eliminar}"></button>
+    </form>
+</div>

@@ -26,8 +26,8 @@ public class CuponController {
     private final MessageSource mensajes;
 
     @GetMapping("/listado")
-    public String listar(Model modelo) {
-        modelo.addAttribute("cupones", servicio.listar());
+    public String listar(Model modelo, HttpServletRequest solicitud) {
+        modelo.addAttribute("cupones", solicitud.isUserInRole("ADMIN") ? servicio.listar() : servicio.listarVigentes());
         return "cupon/listado";
     }
 

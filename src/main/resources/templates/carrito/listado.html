@@ -4,7 +4,7 @@
 <body>
 <header th:replace="~{general/fragmentos :: header}"></header>
 <main class="container py-4">
-    <h1 th:text="#{carrito.titulo}"></h1>
+    <h1 th:text="${revisandoCompra} ? #{carrito.revisarCompra} : #{carrito.titulo}"></h1>
     <section th:replace="~{carrito/fragmentos :: mensajes}"></section>
     <p th:if="${lineas.empty}" th:text="#{carrito.no_mostrar}"></p>
     <section th:unless="${lineas.empty}">
@@ -23,7 +23,7 @@
                 <tbody>
                     <tr th:each="linea : ${lineas}">
                         <td>
-                            <img th:if="${!#strings.isEmpty(linea.rutaImagen)}" th:src="${linea.rutaImagen}"
+                            <img th:if="${!#strings.isEmpty(linea.rutaImagen)}" th:src="@{${linea.rutaImagen}}"
                                  th:alt="${linea.nombre}" width="72" loading="lazy">
                             <strong th:text="${linea.nombre}"></strong>
                             <div><span th:text="#{carrito.idPrenda}"></span> <span th:text="${linea.idPrenda}"></span></div>
@@ -51,7 +51,12 @@
             <span th:text="#{carrito.totalCompra}"></span>
             <span th:text="${total}"></span>
         </p>
+        <p th:if="${revisandoCompra}" th:text="#{carrito.compra.pendiente}"></p>
+        <a th:unless="${revisandoCompra}" class="btn btn-primary"
+           th:href="@{/carrito/compra}" th:text="#{carrito.continuarCompra}"></a>
     </section>
+    <a th:if="${revisandoCompra}" class="btn btn-outline-secondary"
+       th:href="@{/carrito/listado}" th:text="#{carrito.verCarrito}"></a>
     <a class="btn btn-outline-primary" th:href="@{/catalogo/listado}" th:text="#{carrito.seguirComprando}"></a>
 </main>
 <footer th:replace="~{general/fragmentos :: footer}"></footer>

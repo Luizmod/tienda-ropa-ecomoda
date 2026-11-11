@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <h1 th:text="#{nav.consultas}"></h1>
+    <section th:replace="~{general/gestion :: mensajes}"></section>
+    <p th:if="${consultas.empty}" th:text="#{consulta.vacio}"></p>
+    <div class="table-responsive" th:unless="${consultas.empty}">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" th:text="#{consulta.asunto}"></th>
+                    <th scope="col" th:text="#{credenciales.correo}"></th>
+                    <th scope="col" th:text="#{consulta.estado}"></th>
+                    <th scope="col" th:text="#{accion.acciones}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="consulta : ${consultas}">
+                    <th scope="row" th:text="${consulta.asunto}"></th>
+                    <td th:text="${consulta.correo}"></td>
+                    <td th:text="${#messages.msg('consulta.estado.' + consulta.estado)}"></td>
+                    <td>
+                        <a class="btn btn-outline-primary btn-sm"
+                           th:href="@{/admin/consulta/responder/{id}(id=${consulta.idConsulta})}"
+                           th:text="#{consulta.responder}"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

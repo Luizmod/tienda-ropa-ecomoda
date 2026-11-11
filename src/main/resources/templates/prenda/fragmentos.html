@@ -1,0 +1,50 @@
+<div th:fragment="campos">
+    <div class="mb-3">
+        <label for="nombre" class="form-label" th:text="#{prenda.nombre}"></label>
+        <input id="nombre" class="form-control" th:field="*{nombre}" maxlength="120" required>
+    </div>
+    <div class="mb-3">
+        <label for="descripcion" class="form-label" th:text="#{producto.descripcion}"></label>
+        <textarea id="descripcion" class="form-control" th:field="*{descripcion}" maxlength="500" required></textarea>
+    </div>
+    <div class="row">
+        <div class="col-sm mb-3">
+            <label for="precio" class="form-label" th:text="#{producto.precio}"></label>
+            <input id="precio" type="number" min="0" step="0.01" class="form-control" th:field="*{precio}" required>
+        </div>
+        <div class="col-sm mb-3">
+            <label for="idCategoria" class="form-label" th:text="#{producto.categoria}"></label>
+            <select id="idCategoria" class="form-select" th:field="*{idCategoria}">
+                <option value="" th:text="#{prenda.sinCategoria}"></option>
+                <option th:each="categoria : ${categorias}" th:value="${categoria.idCategoria}"
+                        th:text="${categoria.nombre}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3">
+        <img th:if="${!#strings.isEmpty(imagenActual)}" th:src="@{${imagenActual}}"
+             th:alt="#{prenda.imagen.actual}" class="d-block img-thumbnail mb-2" width="144">
+        <label for="imagen" class="form-label" th:text="#{prenda.imagen.subir}"></label>
+        <input id="imagen" name="imagen" type="file" class="form-control" accept="image/jpeg,image/png,image/webp"
+               aria-describedby="imagen-ayuda">
+        <p id="imagen-ayuda" class="form-text" th:text="#{prenda.imagen.ayuda}"></p>
+    </div>
+    <fieldset class="border rounded p-3 mb-3">
+        <legend class="float-none w-auto px-2 fs-6" th:text="#{producto.existencias}"></legend>
+        <ul th:unless="${variantes.empty}" class="list-inline">
+            <li class="list-inline-item badge text-bg-light" th:each="variante : ${variantes}"
+                th:text="|${variante.talla} · ${variante.cantidad}|"></li>
+        </ul>
+        <p class="form-text" th:text="#{prenda.variante.ayuda}"></p>
+        <div class="row">
+            <div class="col-sm">
+                <label for="talla" class="form-label" th:text="#{carrito.talla}"></label>
+                <input id="talla" class="form-control" th:field="*{talla}" maxlength="20" th:required="${id == null}">
+            </div>
+            <div class="col-sm">
+                <label for="cantidad" class="form-label" th:text="#{carrito.cantidad}"></label>
+                <input id="cantidad" type="number" min="0" class="form-control" th:field="*{cantidad}" th:required="${id == null}">
+            </div>
+        </div>
+    </fieldset>
+</div>

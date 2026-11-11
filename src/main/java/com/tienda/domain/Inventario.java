@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class Inventario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_inventario")
     private Long idInventario;
 
@@ -17,4 +18,16 @@ public class Inventario {
 
     private String talla;
     private int cantidad;
+
+    public Inventario() {
+    }
+
+    public Inventario(Prenda prenda, String talla) {
+        this.prenda = prenda;
+        this.talla = talla;
+    }
+
+    public void actualizarCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
 }

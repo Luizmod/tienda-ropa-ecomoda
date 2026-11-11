@@ -4,9 +4,11 @@ package com.tienda.domain;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "consulta")
+@DynamicUpdate
 public class Consulta implements Serializable {
 
     private static final long serialVersionUID = 1L;

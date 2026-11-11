@@ -23,9 +23,9 @@
 </header>
 <nav th:fragment="pestanas" class="nav nav-tabs mb-4" th:attr="aria-label=#{credenciales.perfil}">
     <a class="nav-link active" th:href="@{/perfil}" th:text="#{credenciales.datos}"></a>
-    <a class="nav-link" th:href="@{/direccion/listado}" th:text="#{nav.direcciones}"></a>
-    <a class="nav-link" th:href="@{/metodopago/listado}" th:text="#{nav.metodosPago}"></a>
-    <a class="nav-link" th:href="@{/consulta/listado}" th:text="#{nav.consultas}"></a>
+    <a class="nav-link" sec:authorize="hasRole('CLIENTE')" th:href="@{/direccion/listado}" th:text="#{nav.direcciones}"></a>
+    <a class="nav-link" sec:authorize="hasRole('CLIENTE')" th:href="@{/metodopago/listado}" th:text="#{nav.metodosPago}"></a>
+    <a class="nav-link" sec:authorize="hasRole('CLIENTE')" th:href="@{/consulta/listado}" th:text="#{nav.consultas}"></a>
 </nav>
 <section th:fragment="mensajes">
     <p th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></p>

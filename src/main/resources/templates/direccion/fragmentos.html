@@ -1,0 +1,24 @@
+<div th:fragment="campos">
+    <div class="row">
+        <div class="col-sm mb-3">
+            <label for="provincia" class="form-label" th:text="#{direccion.provincia}"></label>
+            <input id="provincia" class="form-control" th:field="*{provincia}" maxlength="80" required>
+        </div>
+        <div class="col-sm mb-3">
+            <label for="canton" class="form-label" th:text="#{direccion.canton}"></label>
+            <input id="canton" class="form-control" th:field="*{canton}" maxlength="80" required>
+        </div>
+        <div class="col-sm mb-3">
+            <label for="distrito" class="form-label" th:text="#{direccion.distrito}"></label>
+            <input id="distrito" class="form-control" th:field="*{distrito}" maxlength="80" required>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="direccionExacta" class="form-label" th:text="#{direccion.exacta}"></label>
+        <textarea id="direccionExacta" class="form-control" th:field="*{direccionExacta}" maxlength="500" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="telefono" class="form-label" th:text="#{direccion.telefono}"></label>
+        <input id="telefono" type="tel" class="form-control" th:field="*{telefono}" maxlength="20" required>
+    </div>
+</div>

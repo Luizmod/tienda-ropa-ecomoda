@@ -2,10 +2,12 @@
 package com.tienda.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "promocion")
@@ -17,14 +19,26 @@ public class Promociones implements Serializable {
     @Column(name = "id_promocion")
     private Long idPromocion;
 
+    @NotBlank
+    @Size(max = 120)
     private String nombre;
+    @NotBlank
+    @Size(max = 500)
     private String descripcion;
+    @NotNull
+    @Digits(integer = 3, fraction = 2)
+    @DecimalMin("0.01")
+    @DecimalMax("100")
     private BigDecimal porcentaje;
     
     @Column(name = "fecha_inicio")
+    @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate fechaInicio;
     
     @Column(name = "fecha_fin")
+    @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate fechaFin;
 
     public Promociones() {
@@ -83,7 +97,7 @@ public class Promociones implements Serializable {
     }
 
     public String getDescuentoFormateado() {
-        return this.porcentaje != null ? this.porcentaje.intValue() + "%" : "";
+        return this.porcentaje != null ? this.porcentaje.stripTrailingZeros().toPlainString() + "%" : "";
     }
 
     public String getVigenciaFormateada() {

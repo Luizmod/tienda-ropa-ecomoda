@@ -39,4 +39,5 @@ src/main/resources/firebase/*.json
 application-local.properties
 **/application-local.properties
 /secrets/
+/uploads/
 *-firebase-adminsdk-*.json

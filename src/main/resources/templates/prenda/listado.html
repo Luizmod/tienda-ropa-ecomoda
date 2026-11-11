@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 th:text="#{nav.prendas}"></h1>
+        <a class="btn btn-primary" th:href="@{/prenda/nuevo}" th:text="#{prenda.nuevo}"></a>
+    </div>
+    <section th:replace="~{general/gestion :: mensajes}"></section>
+    <p th:if="${registros.empty}" th:text="#{prenda.vacio}"></p>
+    <div class="table-responsive" th:unless="${registros.empty}">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col" th:text="#{prenda.nombre}"></th>
+                    <th scope="col" th:text="#{producto.categoria}"></th>
+                    <th scope="col" th:text="#{producto.precio}"></th>
+                    <th scope="col" th:text="#{accion.acciones}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="registro : ${registros}">
+                    <th scope="row" th:text="${registro.nombre}"></th>
+                    <td th:text="${registro.categoria?.nombre} ?: #{prenda.sinCategoria}"></td>
+                    <td th:text="${registro.precio}"></td>
+                    <td>
+                        <div th:replace="~{general/gestion :: acciones(
+                                @{/prenda/modificar/{id}(id=${registro.idPrenda})},
+                                @{/prenda/eliminar/{id}(id=${registro.idPrenda})}, #{prenda.confirmar})}"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

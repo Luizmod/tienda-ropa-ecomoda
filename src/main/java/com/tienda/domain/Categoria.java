@@ -2,6 +2,8 @@
 package com.tienda.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -14,7 +16,12 @@ public class Categoria implements Serializable {
     @Column(name = "id_categoria")
     private Long idCategoria;
 
+    @NotBlank
+    @Size(max = 120)
     private String nombre;
+
+    @NotBlank
+    @Size(max = 500)
     private String descripcion;
 
     public Categoria() {}

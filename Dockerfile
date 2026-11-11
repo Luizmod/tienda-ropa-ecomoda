@@ -17,7 +17,8 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Creamos un usuario de sistema para no ejecutar la app como root (Seguridad)
-RUN addgroup -S spring && adduser -S spring -G spring
+RUN addgroup -S spring && adduser -S spring -G spring \
+    && mkdir -p /app/uploads/prendas && chown -R spring:spring /app/uploads
 USER spring:spring
 
 # Copiamos el JAR desde la etapa de compilación

@@ -46,7 +46,7 @@ class CredencialesControllerTest {
 
     @Test
     void clienteNoPuedeAdministrarCupones() throws Exception {
-        mvc.perform(get("/cupon/listado").with(user(cliente()))).andExpect(status().isForbidden());
+        mvc.perform(get("/cupon/nuevo").with(user(cliente()))).andExpect(status().isForbidden());
     }
 
     @Test

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div class="col-lg-7">
+        <h1 th:text="${consulta.asunto}"></h1>
+        <p th:text="${consulta.correo}"></p>
+        <p class="text-break" th:text="${consulta.mensaje}"></p>
+        <section th:replace="~{general/gestion :: mensajes}"></section>
+        <form method="post" th:action="@{/admin/consulta/responder/{id}(id=${consulta.idConsulta})}">
+            <div class="mb-3">
+                <label for="respuesta" class="form-label" th:text="#{consulta.respuesta}"></label>
+                <textarea id="respuesta" name="respuesta" class="form-control" maxlength="8000"
+                          th:text="${consulta.respuesta}" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="#{accion.guardar}"></button>
+            <a class="btn btn-outline-secondary" th:href="@{/admin/consulta/listado}" th:text="#{credenciales.cancelar}"></a>
+        </form>
+    </div>
+</main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>
