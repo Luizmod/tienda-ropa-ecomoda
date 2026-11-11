@@ -4,24 +4,31 @@ import com.tienda.SecurityConfig;
 import com.tienda.domain.*;
 import com.tienda.dto.PerfilVista;
 import com.tienda.service.*;
+import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CredencialesController.class)
+@WebMvcTest({CredencialesController.class, IndexController.class})
 @Import(SecurityConfig.class)
 class CredencialesControllerTest {
     @Autowired private MockMvc mvc;
     @MockitoBean private UsuarioService servicio;
     @MockitoBean private UsuarioDetailsService detalles;
+    @MockitoBean private PromocionesService promociones;
 
     private UsuarioAutenticado cliente() {
         var usuario = new Usuario();
@@ -42,6 +49,31 @@ class CredencialesControllerTest {
     void perfilRequiereSesion() throws Exception {
         mvc.perform(get("/perfil")).andExpect(status().is3xxRedirection());
         verifyNoInteractions(servicio);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "es, Mi perfil, Lo esencial se queda contigo.",
+        "en, My profile, The essentials stay with you.",
+        "fr, Mon profil, L’essentiel reste avec vous.",
+        "pt, Meu perfil, O essencial fica com você."
+    })
+    void cambioDeIdiomaEnPerfilSeConservaAlAbrirInicio(String idioma, String perfil, String portada)
+            throws Exception {
+        when(servicio.consultar(7L)).thenReturn(new PerfilVista("cliente@example.com"));
+        when(promociones.listarVigentes()).thenReturn(List.of());
+        var sesion = new MockHttpSession();
+
+        mvc.perform(get("/perfil").session(sesion).with(user(cliente())).param("lang", idioma))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("lang=\"" + idioma + "\"")))
+                .andExpect(content().string(containsString("<h1>" + perfil + "</h1>")))
+                .andExpect(content().string(containsString("href=\"?lang=en\"")));
+
+        mvc.perform(get("/").session(sesion).with(user(cliente())))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("lang=\"" + idioma + "\"")))
+                .andExpect(content().string(containsString("<h1>" + portada + "</h1>")));
     }
 
     @Test
@@ -77,7 +109,10 @@ class CredencialesControllerTest {
         when(servicio.consultar(7L)).thenReturn(new PerfilVista("cliente@example.com"));
         mvc.perform(get("/perfil").with(user(cliente())).param("idUsuario", "99"))
                 .andExpect(status().isOk()).andExpect(view().name("usuario/listado"))
-                .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("hash-no-visible"))));
+                .andExpect(content().string(containsString("id=\"navbarCollapse\"")))
+                .andExpect(content().string(containsString("/webjars/bootstrap/js/bootstrap.min.js")))
+                .andExpect(content().string(not(containsString("class=\"tienda-admin\""))))
+                .andExpect(content().string(not(containsString("hash-no-visible"))));
         verify(servicio).consultar(7L);
         verify(servicio, never()).consultar(99L);
     }

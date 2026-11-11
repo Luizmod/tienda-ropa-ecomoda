@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="es" th:lang="${#locale.toLanguageTag()}" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body>
@@ -7,26 +7,27 @@
 <main class="container py-4">
     <h1 th:text="#{carrito.catalogo}"></h1>
     <p th:if="${variantes.empty}" th:text="#{carrito.catalogo.vacio}"></p>
-    <div class="row row-cols-1 row-cols-md-3 g-3">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
         <article class="col" th:each="variante : ${variantes}" th:with="prenda=${variante.prenda}">
-            <div class="card h-100">
-                <img class="card-img-top" th:if="${!#strings.isEmpty(prenda.rutaImagen)}"
-                     th:src="@{${prenda.rutaImagen}}" th:alt="${prenda.nombre}" loading="lazy">
-                <div class="card-body">
+            <div class="card h-100 catalogo-prenda">
+                <div class="catalogo-imagen">
+                    <img th:if="${!#strings.isEmpty(prenda.rutaImagen)}"
+                         th:src="@{${prenda.rutaImagen}}" th:alt="${prenda.nombre}" loading="lazy">
+                    <i th:if="${#strings.isEmpty(prenda.rutaImagen)}" class="fa-solid fa-shirt" aria-hidden="true"></i>
+                </div>
+                <div class="card-body d-flex flex-column">
                     <h2 class="h5" th:text="${prenda.nombre}"></h2>
-                    <p th:text="${prenda.descripcion}"></p>
-                    <dl>
-                        <dt th:text="#{carrito.talla}"></dt>
-                        <dd th:text="${variante.talla}"></dd>
-                        <dt th:text="#{producto.precio}"></dt>
-                        <dd th:text="${prenda.precio}"></dd>
-                    </dl>
-                    <p th:if="${variante.cantidad == 0}" th:text="#{carrito.agotado}"></p>
+                    <p class="small" th:text="${prenda.descripcion}"></p>
+                    <div class="catalogo-datos mt-auto mb-3">
+                        <span><span th:text="#{carrito.talla}"></span> <strong th:text="${variante.talla}"></strong></span>
+                        <strong th:text="${prenda.precio}"></strong>
+                    </div>
+                    <p class="mb-0" th:if="${variante.cantidad == 0}" th:text="#{carrito.agotado}"></p>
                     <div th:if="${variante.cantidad > 0}">
                         <form sec:authorize="hasAnyRole('ANONYMOUS', 'CLIENTE')" method="post"
                               th:action="@{/carrito/agregar/{id}(id=${prenda.idPrenda})}">
                             <input type="hidden" name="talla" th:value="${variante.talla}">
-                            <button class="btn btn-primary" type="submit" th:text="#{carrito.agregar}"></button>
+                            <button class="btn btn-primary btn-sm" type="submit" th:text="#{carrito.agregar}"></button>
                         </form>
                     </div>
                 </div>

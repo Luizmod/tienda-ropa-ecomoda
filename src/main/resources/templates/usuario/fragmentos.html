@@ -5,23 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="#{credenciales.titulo}"></title>
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet">
+    <link th:href="@{/css/ecomoda.css}" rel="stylesheet">
     <link th:href="@{/css/credenciales.css}" rel="stylesheet">
+    <th:block sec:authorize="isAuthenticated()">
+        <th:block th:replace="~{general/fragmentos :: scriptsMenu}"></th:block>
+    </th:block>
 </head>
 <body>
 <aside th:fragment="marca" class="marca">
-    <a th:href="@{/}" class="logotipo" th:text="#{aplicacion.titulo}"></a>
+    <a th:href="@{/}" class="logotipo"><i class="fa-solid fa-leaf" aria-hidden="true"></i> EcoModa</a>
     <h1 th:text="#{credenciales.lema}"></h1>
     <p th:text="#{credenciales.tienda}"></p>
 </aside>
-<header th:fragment="cabecera" class="cabecera">
-    <a class="logotipo" th:href="@{/}" th:text="#{aplicacion.titulo}"></a>
-    <a th:href="@{/}" th:text="#{credenciales.inicio}"></a>
-    <a th:href="@{/perfil}" th:text="#{credenciales.perfil}"></a>
+<div th:fragment="titulo" class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+    <div>
+        <h1 th:text="#{credenciales.perfil}"></h1>
+        <p class="text-body-secondary mb-0" th:text="#{credenciales.perfil.ayuda}"></p>
+    </div>
     <form th:action="@{/logout}" method="post">
-        <button class="btn btn-outline-dark" th:text="#{credenciales.salir}"></button>
+        <button class="btn btn-outline-secondary" th:text="#{credenciales.salir}"></button>
     </form>
-</header>
-<nav th:fragment="pestanas" class="nav nav-tabs mb-4" th:attr="aria-label=#{credenciales.perfil}">
+</div>
+<nav th:fragment="pestanas" class="nav nav-tabs perfil-pestanas my-4" th:attr="aria-label=#{credenciales.perfil}">
     <a class="nav-link active" th:href="@{/perfil}" th:text="#{credenciales.datos}"></a>
     <a class="nav-link" sec:authorize="hasRole('CLIENTE')" th:href="@{/direccion/listado}" th:text="#{nav.direcciones}"></a>
     <a class="nav-link" sec:authorize="hasRole('CLIENTE')" th:href="@{/metodopago/listado}" th:text="#{nav.metodosPago}"></a>
@@ -31,18 +37,18 @@
     <p th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></p>
     <p th:if="${todoOk}" class="alert alert-success" role="status" th:text="${todoOk}"></p>
 </section>
-<section th:fragment="datos" class="tarjeta">
+<section th:fragment="datos(mostrarAcciones)" class="card perfil-tarjeta p-4">
     <h2 th:text="#{credenciales.datos}"></h2>
-    <dl>
+    <dl class="perfil-datos">
         <dt th:text="#{credenciales.correo}"></dt>
         <dd th:text="${perfil.correo}"></dd>
         <dt th:text="#{credenciales.contrasena}"></dt>
         <dd th:text="#{credenciales.contrasena.protegida}"></dd>
     </dl>
-    <div class="acciones">
-        <a class="btn btn-dark" th:href="@{/perfil/modifica}" th:text="#{credenciales.modificar}"></a>
-        <a class="btn btn-outline-dark" th:href="@{/perfil/eliminar}" th:text="#{credenciales.borrar}"></a>
-        <a class="btn btn-outline-dark" th:href="@{/}" th:text="#{credenciales.volver}"></a>
+    <div th:if="${mostrarAcciones}" class="acciones">
+        <a class="btn btn-primary" th:href="@{/perfil/modifica}" th:text="#{credenciales.modificar}"></a>
+        <a class="btn btn-outline-danger" th:href="@{/perfil/eliminar}" th:text="#{credenciales.borrar}"></a>
+        <a class="btn btn-outline-secondary" th:href="@{/}" th:text="#{credenciales.volver}"></a>
     </div>
 </section>
 </body>

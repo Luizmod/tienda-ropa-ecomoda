@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" th:lang="${#locale.toLanguageTag()}" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body>
 <header th:replace="~{general/fragmentos :: header}"></header>
@@ -7,7 +7,7 @@
     <h1 th:text="${revisandoCompra} ? #{carrito.revisarCompra} : #{carrito.titulo}"></h1>
     <section th:replace="~{carrito/fragmentos :: mensajes}"></section>
     <p th:if="${lineas.empty}" th:text="#{carrito.no_mostrar}"></p>
-    <section th:unless="${lineas.empty}">
+    <section th:unless="${lineas.empty}" class="carrito-columnas mb-3">
         <div class="table-responsive">
             <table class="table align-middle">
                 <thead>
@@ -47,13 +47,46 @@
                 </tbody>
             </table>
         </div>
-        <p class="fw-bold text-end">
-            <span th:text="#{carrito.totalCompra}"></span>
-            <span th:text="${total}"></span>
-        </p>
-        <p th:if="${revisandoCompra}" th:text="#{carrito.compra.pendiente}"></p>
-        <a th:unless="${revisandoCompra}" class="btn btn-primary"
-           th:href="@{/carrito/compra}" th:text="#{carrito.continuarCompra}"></a>
+        <aside class="card carrito-resumen p-3">
+            <h2 class="h4 mb-3" th:text="#{carrito.resumen}"></h2>
+            <div th:if="${cuponesAsignados != null}" class="mb-3">
+                <form method="post" th:action="@{/carrito/cupon/aplicar}" class="d-flex flex-wrap align-items-end gap-2">
+                    <div>
+                        <label for="codigo-cupon" class="form-label" th:text="#{carrito.cupon.codigo}"></label>
+                        <input id="codigo-cupon" name="codigo" class="form-control" maxlength="40" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary" th:text="#{carrito.cupon.aplicar}"></button>
+                </form>
+                <div th:unless="${cuponesAsignados.empty}" class="mt-2">
+                    <p class="mb-1" th:text="#{carrito.cupon.asignados}"></p>
+                    <form th:each="cupon : ${cuponesAsignados}" method="post" th:action="@{/carrito/cupon/aplicar}"
+                          class="d-inline-block me-1">
+                        <button type="submit" name="codigo" th:value="${cupon.codigo}" class="btn btn-outline-secondary btn-sm"
+                                th:text="|${cupon.codigo} · ${cupon.porcentaje.stripTrailingZeros().toPlainString()} %|"></button>
+                    </form>
+                </div>
+            </div>
+            <a th:if="${cuponesAsignados == null}" th:href="@{/carrito/cupon}" th:text="#{carrito.cupon.ingresar}"></a>
+            <div th:if="${cuponAplicado != null}" class="text-end">
+                <p class="mb-1">
+                    <span th:text="#{carrito.subtotal}"></span> <span th:text="${subtotal}"></span>
+                </p>
+                <p class="mb-1">
+                    <span th:text="#{carrito.cupon.descuento(${cuponAplicado.codigo})}"></span>
+                    <span th:text="|−${descuento}|"></span>
+                </p>
+                <form method="post" th:action="@{/carrito/cupon/quitar}">
+                    <button type="submit" class="btn btn-link btn-sm" th:text="#{carrito.cupon.quitar}"></button>
+                </form>
+            </div>
+            <p class="fw-bold text-end">
+                <span th:text="#{carrito.totalCompra}"></span>
+                <span th:text="${total}"></span>
+            </p>
+            <p th:if="${revisandoCompra}" th:text="#{carrito.compra.pendiente}"></p>
+            <a th:unless="${revisandoCompra}" class="btn btn-primary"
+               th:href="@{/carrito/compra}" th:text="#{carrito.continuarCompra}"></a>
+        </aside>
     </section>
     <a th:if="${revisandoCompra}" class="btn btn-outline-secondary"
        th:href="@{/carrito/listado}" th:text="#{carrito.verCarrito}"></a>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" th:lang="${#locale.toLanguageTag()}" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{usuario/fragmentos :: head}"></head>
 <body>
-<header th:replace="~{usuario/fragmentos :: cabecera}"></header>
-<main class="perfil">
-    <h1 th:text="#{credenciales.perfil}"></h1>
-    <p th:text="#{credenciales.perfil.ayuda}"></p>
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div th:replace="~{usuario/fragmentos :: titulo}"></div>
     <nav th:replace="~{usuario/fragmentos :: pestanas}"></nav>
     <section th:replace="~{usuario/fragmentos :: mensajes}"></section>
-    <section th:replace="~{usuario/fragmentos :: datos}"></section>
+    <section th:replace="~{usuario/fragmentos :: datos(true)}"></section>
 </main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
 </body>
 </html>

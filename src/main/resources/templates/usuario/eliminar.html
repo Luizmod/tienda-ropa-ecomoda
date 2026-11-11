@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" th:lang="${#locale.toLanguageTag()}" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{usuario/fragmentos :: head}"></head>
 <body>
-<header th:replace="~{usuario/fragmentos :: cabecera}"></header>
-<main class="perfil">
-    <h1 th:text="#{credenciales.borrar}"></h1>
-    <section class="tarjeta confirmacion">
+<header th:replace="~{general/fragmentos :: header}"></header>
+<main class="container py-4">
+    <div th:replace="~{usuario/fragmentos :: titulo}"></div>
+    <nav th:replace="~{usuario/fragmentos :: pestanas}"></nav>
+    <section class="card perfil-tarjeta p-4">
         <h2 th:text="#{credenciales.eliminar.pregunta}"></h2>
         <p th:text="#{credenciales.eliminar.aviso}"></p>
         <form th:action="@{/perfil/eliminar}" method="post" class="acciones">
-            <button class="btn btn-dark" th:text="#{credenciales.confirmar}"></button>
-            <a class="btn btn-outline-dark" th:href="@{/perfil}" th:text="#{credenciales.cancelar}"></a>
+            <button class="btn btn-danger" th:text="#{credenciales.confirmar}"></button>
+            <a class="btn btn-outline-secondary" th:href="@{/perfil}" th:text="#{credenciales.cancelar}"></a>
         </form>
     </section>
 </main>
+<footer th:replace="~{general/fragmentos :: footer}"></footer>
 </body>
 </html>

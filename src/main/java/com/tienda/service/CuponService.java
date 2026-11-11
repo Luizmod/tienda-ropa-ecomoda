@@ -6,6 +6,7 @@ import com.tienda.repository.CuponRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,21 @@ public class CuponService {
     }
 
     public List<Cupon> listarVigentes() {
-        return repositorio.findByActivoTrueAndFechaVencimientoGreaterThanEqualOrderByCodigoAsc(LocalDate.now());
+        return repositorio.findByIdUsuarioIsNullAndActivoTrueAndFechaVencimientoGreaterThanEqualOrderByCodigoAsc(LocalDate.now());
+    }
+
+    public List<Cupon> listarAsignados(Long idUsuario) {
+        return repositorio.findByIdUsuarioAndActivoTrueAndFechaVencimientoGreaterThanEqualOrderByCodigoAsc(
+                idUsuario, LocalDate.now());
+    }
+
+    public Optional<Cupon> buscarAplicable(String codigo, Long idUsuario) {
+        String normalizado = codigo.strip().toUpperCase(Locale.ROOT);
+        if (normalizado.isEmpty() || normalizado.length() > 40) {
+            return Optional.empty();
+        }
+        return repositorio.findByCodigoAndActivoTrueAndFechaVencimientoGreaterThanEqual(normalizado, LocalDate.now())
+                .filter(cupon -> cupon.getIdUsuario() == null || cupon.getIdUsuario().equals(idUsuario));
     }
 
     public Cupon consultar(Long idCupon) {

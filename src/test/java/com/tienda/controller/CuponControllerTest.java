@@ -44,10 +44,23 @@ class CuponControllerTest {
         mvc.perform(get("/cupon/listado"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("MODA")))
+                .andExpect(content().string(containsString("id=\"navbarCollapse\"")))
+                .andExpect(content().string(not(containsString("class=\"tienda-admin\""))))
                 .andExpect(content().string(not(containsString("/cupon/modifica/7"))));
         mvc.perform(get("/cupon/nuevo")).andExpect(redirectedUrl("/login"));
         verify(servicio).listarVigentes();
         verify(servicio, never()).listar();
+    }
+
+    @Test
+    void clienteVeMenuSuperiorSinMenuLateral() throws Exception {
+        when(servicio.listarVigentes()).thenReturn(List.of());
+
+        mvc.perform(get("/cupon/listado").with(user("cliente").roles("CLIENTE")))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("id=\"navbarCollapse\"")))
+                .andExpect(content().string(not(containsString("class=\"tienda-admin\""))))
+                .andExpect(content().string(containsString("href=\"/perfil\"")));
     }
 
     @Test
@@ -59,7 +72,9 @@ class CuponControllerTest {
         when(servicio.consultar(7L)).thenReturn(cupon);
 
         mvc.perform(get("/cupon/listado").with(user("admin").roles("ADMIN")))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("MODA")));
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("MODA")))
+                .andExpect(content().string(containsString("class=\"tienda-admin\"")));
         mvc.perform(get("/cupon/modifica/7").with(user("admin").roles("ADMIN")))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("action=\"/cupon/modifica/7\"")))

@@ -1,13 +1,16 @@
 package com.tienda.controller;
 
 import com.tienda.dto.LineaCarritoVista;
+import com.tienda.domain.Cupon;
 import com.tienda.service.CarritoService;
 import com.tienda.service.CarritoService.CarritoException;
 import com.tienda.service.CarritoService.CarritoInvitado;
+import com.tienda.service.CuponService;
 import com.tienda.service.UsuarioAutenticado;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -28,7 +31,9 @@ import org.springframework.web.util.WebUtils;
 public class CarritoController {
     private static final String LISTADO = "redirect:/carrito/listado";
     private static final String CARRITO_INVITADO = "carritoInvitado";
+    private static final String CUPON_APLICADO = "cuponAplicado";
     private final CarritoService servicio;
+    private final CuponService cupones;
     private final MessageSource mensajes;
 
     @GetMapping("/catalogo/listado")
@@ -37,7 +42,7 @@ public class CarritoController {
         return "carrito/catalogo";
     }
 
-    @GetMapping("/carrito/listado")
+    @GetMapping({"/carrito/listado", "/carrito/cupon"})
     public String listar(@AuthenticationPrincipal UsuarioAutenticado usuario, HttpSession sesion,
             Model modelo, Locale idioma) {
         return mostrar(usuario, sesion, modelo, idioma, false);
@@ -58,12 +63,44 @@ public class CarritoController {
             incorporarInvitado(usuario.getIdUsuario(), sesion, modelo, idioma);
             lineas = servicio.listar(usuario.getIdUsuario());
         }
-        BigDecimal total = lineas.stream().map(LineaCarritoVista::getSubtotal)
+        BigDecimal subtotal = lineas.stream().map(LineaCarritoVista::getSubtotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal descuento = BigDecimal.ZERO;
+        if (usuario != null && !lineas.isEmpty()) {
+            modelo.addAttribute("cuponesAsignados", cupones.listarAsignados(usuario.getIdUsuario()));
+            var aplicado = cuponAplicado(usuario.getIdUsuario(), sesion);
+            if (aplicado != null) {
+                descuento = subtotal.multiply(aplicado.getPorcentaje()).movePointLeft(2)
+                        .setScale(2, RoundingMode.HALF_UP);
+                modelo.addAttribute("cuponAplicado", aplicado);
+            }
+        }
         modelo.addAttribute("lineas", lineas);
-        modelo.addAttribute("total", total);
+        modelo.addAttribute("subtotal", subtotal);
+        modelo.addAttribute("descuento", descuento);
+        modelo.addAttribute("total", subtotal.subtract(descuento));
         modelo.addAttribute("revisandoCompra", revisandoCompra);
         return "carrito/listado";
+    }
+
+    @PostMapping("/carrito/cupon/aplicar")
+    public String aplicarCupon(@AuthenticationPrincipal UsuarioAutenticado usuario, HttpSession sesion,
+            @RequestParam String codigo, RedirectAttributes atributos, Locale idioma) {
+        var cupon = cupones.buscarAplicable(codigo, usuario.getIdUsuario())
+                .orElseThrow(() -> new CarritoException("carrito.cupon.invalido"));
+        sesion.setAttribute(CUPON_APLICADO, cupon.getCodigo());
+        return exito(atributos, idioma, "carrito.cupon.aplicado");
+    }
+
+    @PostMapping("/carrito/cupon/quitar")
+    public String quitarCupon(HttpSession sesion, RedirectAttributes atributos, Locale idioma) {
+        sesion.removeAttribute(CUPON_APLICADO);
+        return exito(atributos, idioma, "carrito.cupon.quitado");
+    }
+
+    private Cupon cuponAplicado(Long idUsuario, HttpSession sesion) {
+        String codigo = (String) sesion.getAttribute(CUPON_APLICADO);
+        return codigo == null ? null : cupones.buscarAplicable(codigo, idUsuario).orElse(null);
     }
 
     @PostMapping("/carrito/agregar/{idPrenda}")
